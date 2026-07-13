@@ -1,0 +1,7 @@
+# Normalize line endings so Go source is LF on all platforms.
+* text=auto eol=lf
+*.go text eol=lf
+go.mod text eol=lf
+go.sum text eol=lf
+*.md text eol=lf
+.gitignore text eol=lf
