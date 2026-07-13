@@ -162,6 +162,25 @@ http://localhost:8082/weather?city=London
 - Unknown city → JSON `error` field
 - WMO weather codes are mapped to readable conditions (e.g. Rain, Thunderstorm)
 
+### 9. `bmi-calculator`
+Body Mass Index calculator with WHO categories. Metric (cm/kg) and Imperial (in/lb) support. Runs on **`:8083`**.
+
+```bash
+cd bmi-calculator
+go run main.go            # serves on :8083
+# Open http://localhost:8083  (web form)
+```
+
+Query the API:
+```
+http://localhost:8083/bmi?unit=metric&height=170&weight=65
+# → {"bmi":22.49,"category":"Normal","unit":"metric"}
+```
+
+- `height`, `weight` — required (positive numbers); missing/invalid → HTTP 400
+- `unit` — `metric` (default) or `imperial`; invalid → HTTP 400
+- Categories: Underweight (<18.5), Normal (<25), Overweight (<30), Obese Class I/II/III
+
 ## Requirements
 ```bash
 go build -o app.exe main.go   # produces a standalone binary (excluded from git via .gitignore)
