@@ -142,6 +142,26 @@ http://localhost:8081/quote    → quote (dummyjson.com)
 ```
 - If the primary source is down, `/random` falls back to the other; individual endpoints report an `error` field.
 
+### 8. `weather`
+Live weather by city using open-meteo (no API key). Geocodes the city name, then fetches current conditions. Runs on **`:8082`**.
+
+```bash
+cd weather
+go run main.go            # serves on :8082
+# Open http://localhost:8082  (web form)
+```
+
+Query the API:
+```
+http://localhost:8082/weather?city=London
+# → {"city":"London","country":"United Kingdom","temp":19.2,"temp_unit":"°C",
+#     "wind":19.8,"wind_unit":"km/h","humidity":66,"condition":"Partly cloudy","source":"open-meteo.com"}
+```
+
+- `city` — any city name (required; missing → HTTP 400)
+- Unknown city → JSON `error` field
+- WMO weather codes are mapped to readable conditions (e.g. Rain, Thunderstorm)
+
 ## Requirements
 ```bash
 go build -o app.exe main.go   # produces a standalone binary (excluded from git via .gitignore)
