@@ -59,7 +59,26 @@ Behavior:
 - missing/empty URL → HTTP 400; unknown code → HTTP 404; wrong method → HTTP 405
 - **Note:** storage is in-memory only — codes reset when the server restarts.
 
-## Requirements
+### 4. `currency-converter`
+A currency converter with live exchange rates (falls back to static rates if offline). Ships with a web form at `/`.
+
+```bash
+cd currency-converter
+go run main.go
+# Open http://localhost:8080  (web form)
+```
+
+Convert via the API:
+```
+http://localhost:8080/convert?from=usd&to=inr&amount=100
+# → {"from":"USD","to":"INR","amount":100,"rate":95.49,"result":9549.28,"source":"live"}
+```
+
+Behavior:
+- `GET /convert?from=<CUR>&to=<CUR>&amount=<N>` → JSON with `rate`, `result`, and `source`
+- `source` is `"live"` (from open.er-api.com, no key needed) or `"fallback"` (static rates if offline)
+- Currencies: USD, EUR, GBP, INR, JPY, CAD, AUD, CHF, CNY, SGD, AED, BTC (codes are case-insensitive)
+- missing params or unknown currency → HTTP 400
 - Go 1.26+
 
 ## Building
