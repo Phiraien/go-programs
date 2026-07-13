@@ -81,7 +81,33 @@ Behavior:
 - missing params or unknown currency → HTTP 400
 - Go 1.26+
 
-## Building
+### 5. `password-generator`
+A cryptographically secure password generator (uses `crypto/rand`, no modulo bias). Ships with a web form at `/`.
+
+```bash
+cd password-generator
+go run main.go
+# Open http://localhost:8080  (web form)
+```
+
+Generate via the API:
+```
+http://localhost:8080/generate?length=16&count=1&upper=true&digits=true&symbols=false
+# → {"length":16,"count":1,"passwords":["7tVJPwxCvH7HfIG2"]}
+```
+
+Query params:
+- `length` — password length, 1–128 (default 16)
+- `count` — how many to generate, 1–50 (default 1)
+- `upper` — include uppercase A–Z (default true)
+- `digits` — include numbers 0–9 (default true)
+- `symbols` — include symbols e.g. `!@#$%` (default false)
+
+Behavior:
+- at least lowercase `a–z` is always included
+- invalid `length`/`count` → HTTP 400
+
+## Requirements
 ```bash
 go build -o app.exe main.go   # produces a standalone binary (excluded from git via .gitignore)
 ```
