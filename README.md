@@ -107,6 +107,41 @@ Behavior:
 - at least lowercase `a–z` is always included
 - invalid `length`/`count` → HTTP 400
 
+### 6. `qr-generator`
+Generates a scannable QR code PNG from any text or URL. Uses `github.com/skip2/go-qrcode`.
+
+```bash
+cd qr-generator
+go run main.go            # serves on :8080
+# Open http://localhost:8080  (web form)
+```
+
+Generate via the API:
+```
+http://localhost:8080/qr?text=https://github.com/Phiraien
+# → returns a 256px PNG image (Content-Type: image/png)
+```
+
+- `text` — any string up to 2000 chars (required; missing → HTTP 400)
+- The web form shows the QR inline; scan it with your phone.
+
+### 7. `joke-quote`
+Fetches random jokes and quotes from free public APIs. Serves a web page at `/` with Random / Joke / Quote buttons. Runs on **`:8081`** (so it can coexist with other services on 8080).
+
+```bash
+cd joke-quote
+go run main.go            # serves on :8081
+# Open http://localhost:8081  (web UI)
+```
+
+Endpoints (all return JSON `{type, text, author?, source}`):
+```
+http://localhost:8081/random   → a joke or quote
+http://localhost:8081/joke     → joke (jokeapi.dev)
+http://localhost:8081/quote    → quote (dummyjson.com)
+```
+- If the primary source is down, `/random` falls back to the other; individual endpoints report an `error` field.
+
 ## Requirements
 ```bash
 go build -o app.exe main.go   # produces a standalone binary (excluded from git via .gitignore)
