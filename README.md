@@ -181,6 +181,32 @@ http://localhost:8083/bmi?unit=metric&height=170&weight=65
 - `unit` — `metric` (default) or `imperial`; invalid → HTTP 400
 - Categories: Underweight (<18.5), Normal (<25), Overweight (<30), Obese Class I/II/III
 
+### 10. `site-checker`
+Checks whether a list of websites are up or down, in parallel (goroutines + WaitGroup). Reports status code and latency per URL. Runs on **`:8080`**.
+
+```bash
+cd site-checker
+go run main.go            # serves on :8080
+# Open http://localhost:8080  (web form)
+```
+
+Check via API — POST JSON:
+```bash
+curl -X POST http://localhost:8080/check -H "Content-Type: application/json" \
+  -d '{"urls":["https://github.com","https://google.com"]}'
+# → {"results":[{"url":"https://github.com","status_code":200,"up":true,"latency_ms":83.1}, ...]}
+```
+
+Or via query string (comma/newline separated):
+```
+http://localhost:8080/check?urls=https://github.com,https://google.com
+```
+
+- Each URL is checked concurrently; total time ≈ the slowest one
+- Redirects are NOT followed (real status like 301/302 is reported)
+- Per result: `up`, `status_code`, `latency_ms`, `error` (on failure)
+- Max 50 URLs per request; empty list → HTTP 400
+
 ## Requirements
 ```bash
 go build -o app.exe main.go   # produces a standalone binary (excluded from git via .gitignore)
