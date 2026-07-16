@@ -13,7 +13,7 @@ RUN go mod download
 COPY . .
 
 # Build the binary
-RUN CGO_ENABLED=0 GOOS=linux go build -o jokes-quotes .
+RUN CGO_ENABLED=0 GOOS=linux go build -o joke-quote .
 
 # -------- Runtime Stage --------
 FROM alpine:latest
@@ -21,10 +21,10 @@ FROM alpine:latest
 WORKDIR /app
 
 # Copy the compiled binary
-COPY --from=builder /app/jokes-quotes .
+COPY --from=builder /app/joke-quote .
 
 # Expose the application's port
 EXPOSE 8081
 
 # Run the application
-CMD ["./jokes-quotes"]
+CMD ["./joke-quote"]
